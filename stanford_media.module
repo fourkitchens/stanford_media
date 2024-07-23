@@ -5,6 +5,7 @@
  * stanford_media.module
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -279,11 +280,26 @@ function stanford_media_media_prepare_form(MediaInterface $media, $operation, Fo
   // Display a message to the user to alert them than editing will affect
   // multiple pieces of content.
   if ($count) {
-    $message = \Drupal::translation()->formatPlural(
+    $pluralText = \Drupal::translation()->formatPlural(
       $count,
-      'Changing this media item will affect %count piece of content.',
-      'Changing this media item will affect %count pieces of content.',
-      ['%count' => $count]
+      '@count piece of content',
+      '@count pieces of content',
+      [
+        '@count' => $count,
+      ]
+    );
+    $formattedLink = new FormattableMarkup(
+      '<a href="/media/@media_id/usage" target="_blank">@plural_text</a>',
+      [
+        '@media_id' => $media->id(),
+        '@plural_text' => $pluralText,
+      ]
+    );
+    $message = new FormattableMarkup(
+      'Changing this media will affect @formatted_link.',
+      [
+        '@formatted_link' => $formattedLink,
+      ]
     );
     \Drupal::messenger()->addWarning($message);
   }
