@@ -307,6 +307,14 @@ function stanford_media_media_prepare_form(MediaInterface $media, $operation, Fo
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function stanford_media_form_media_form_alter(&$form, &$form_state) {
+  // Adding styling for media form for stanford_media_media_prepare_form items.
+  $form['#attached']['library'][] = 'stanford_media/admin';
+}
+
+/**
  * Implements hook_entity_access().
  *
  * Restrict access to media entities that are used as field default values.
