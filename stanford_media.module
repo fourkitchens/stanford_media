@@ -280,7 +280,7 @@ function stanford_media_media_prepare_form(MediaInterface $media, $operation, Fo
   // Display a message to the user to alert them than editing will affect
   // multiple pieces of content.
   if ($count) {
-    $pluralText = \Drupal::translation()->formatPlural(
+    $plural_text = \Drupal::translation()->formatPlural(
       $count,
       '@count piece of content',
       '@count pieces of content',
@@ -288,17 +288,17 @@ function stanford_media_media_prepare_form(MediaInterface $media, $operation, Fo
         '@count' => $count,
       ]
     );
-    $formattedLink = new FormattableMarkup(
-      '<a href="/media/@media_id/usage" target="_blank">@plural_text</a>',
+    $formatted_link = new FormattableMarkup(
+      '<a href="@usage" target="_blank">@plural_text</a>',
       [
-        '@media_id' => $media->id(),
-        '@plural_text' => $pluralText,
+        '@usage' => $media->toUrl('usage')->toString(),
+        '@plural_text' => $plural_text,
       ]
     );
-    $message = new FormattableMarkup(
+    $message = t(
       'Changing this media will affect @formatted_link.',
       [
-        '@formatted_link' => $formattedLink,
+        '@formatted_link' => $formatted_link,
       ]
     );
     \Drupal::messenger()->addWarning($message);
